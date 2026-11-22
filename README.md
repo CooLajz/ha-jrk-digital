@@ -1,5 +1,7 @@
 # JRK Digital pro Home Assistant
 
+[![Kontroly Home Assistantu, HACS a testy](https://github.com/CooLajz/ha-jrk-digital/actions/workflows/validate.yml/badge.svg?branch=main)](https://github.com/CooLajz/ha-jrk-digital/actions/workflows/validate.yml?query=branch%3Amain)
+
 Kolikrát se letos vyvážela nádoba na směsný odpad a kolik už svozy stály? Integrace načte evidenci z občanského portálu JRK Digital. Každé vybrané svozové místo má v Home Assistantu vlastní zařízení, kalendáře, senzory a měsíční statistiky. Součástí je také karta **JRK Digital · Přehled odpadů**.
 
 ![Historie svozů s datem, druhem odpadu, objemem, hmotností a cenou](docs/screenshots/historie.png)

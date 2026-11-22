@@ -4,11 +4,13 @@ permissions:
   contents: read
 jobs:
   hassfest:
+    name: Home Assistant (hassfest)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
       - uses: home-assistant/actions/hassfest@master
   marketplace:
+    name: HACS (integrace)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -16,6 +18,7 @@ jobs:
         with:
           category: integration
   tests:
+    name: Testy integrace a karty
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
