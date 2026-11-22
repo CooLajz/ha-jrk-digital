@@ -1,13 +1,18 @@
 {
   "domain": "jrk_digital",
   "name": "JRK Digital",
+  "categories": [
+    "local_services"
+  ],
   "codeowners": [
     "@CooLajz"
   ],
   "config_flow": true,
   "dependencies": [
     "frontend",
-    "recorder"
+    "http",
+    "recorder",
+    "websocket_api"
   ],
   "documentation": "https://github.com/CooLajz/ha-jrk-digital",
   "integration_type": "hub",

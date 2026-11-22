@@ -6,7 +6,7 @@ from homeassistant.components.recorder.models import StatisticMeanType
 from homeassistant.components.recorder.statistics import async_add_external_statistics
 from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
 from homeassistant.exceptions import ConfigEntryAuthFailed
-from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers import config_validation as cv, device_registry as dr
 from homeassistant.helpers.storage import Store
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
@@ -14,6 +14,8 @@ from .api import CitizenPortal, LoginError, PortalError
 from .card import async_register_card
 from .const import DOMAIN, PLATFORMS, PORTAL_ZONE
 from .data import MATERIAL_LABELS, fetch_place, monthly_totals
+
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 _LOGGER = logging.getLogger(__name__)
 NORMAL_INTERVAL = timedelta(days=1)
