@@ -21,10 +21,14 @@ class WasteCalendar(PlaceEntity, CalendarEntity):
 
     @property
     def extra_state_attributes(self):
+        if not self.available:
+            return {}
         return {"datum_synchronizace": self.data["updated"], "ulozena_data": self.coordinator.using_cache,
                 "revize_synchronizace": self.coordinator.revision}
 
     def _events(self):
+        if not self.available:
+            return
         if self.planned:
             for row in self.data["schedule"]:
                 day = date.fromisoformat(row["day"])

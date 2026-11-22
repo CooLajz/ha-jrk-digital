@@ -4,6 +4,7 @@ from homeassistant import config_entries
 from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
 from homeassistant.helpers import selector
 
+from . import poll_store
 from .api import CitizenPortal, LoginError, PortalError
 from .const import DOMAIN
 
@@ -20,7 +21,7 @@ class JRKConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 self.places = await self.hass.async_add_executor_job(client.subjects)
             except LoginError:
                 errors["base"] = "invalid_auth"
-            except (PortalError, OSError, KeyError, ValueError):
+            except (PortalError, OSError, KeyError, ValueError, TypeError, AttributeError):
                 errors["base"] = "cannot_connect"
             else:
                 if not self.places:
@@ -28,7 +29,14 @@ class JRKConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 await self.async_set_unique_id(account.casefold())
                 if self.source == config_entries.SOURCE_REAUTH:
                     self._abort_if_unique_id_mismatch()
-                    return self.async_update_reload_and_abort(self._get_reauth_entry(), data_updates=user_input)
+                    entry = self._get_reauth_entry()
+                    store = poll_store(self.hass, entry)
+                    poll = await store.async_load()
+                    if poll and poll.get("auth_required"):
+                        await store.async_save({**poll, "auth_required": False, "completed": False,
+                                               "next_update": None, "error": None, "failures": 0})
+                    return self.async_update_reload_and_abort(entry, data_updates={
+                        CONF_USERNAME: account, CONF_PASSWORD: user_input[CONF_PASSWORD]})
                 self._abort_if_unique_id_configured()
                 self.places = self._available_places(self.places)
                 if not self.places:
@@ -54,7 +62,7 @@ class JRKConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             places = await self.hass.async_add_executor_job(client.subjects)
         except LoginError:
             return self.async_abort(reason="invalid_auth")
-        except (PortalError, OSError, KeyError, ValueError):
+        except (PortalError, OSError, KeyError, ValueError, TypeError, AttributeError):
             return self.async_abort(reason="cannot_connect")
         self.places = self._available_places(places, entry)
         if not self.places:

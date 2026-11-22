@@ -18,5 +18,9 @@ class PlaceEntity(CoordinatorEntity):
                                             model="Svozové místo", name=coordinator.entry.data["places"][place])
 
     @property
+    def available(self):
+        return self.place in (self.coordinator.data or {})
+
+    @property
     def data(self):
         return self.coordinator.data[self.place]

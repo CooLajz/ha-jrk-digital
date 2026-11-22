@@ -87,6 +87,21 @@ Přidejte vestavěnou kartu **Graf statistik**, zvolte období **měsíc** a sta
 
 Při prvním připojení se načtou dostupná vykazovací období. Poté integrace jednou denně kontroluje poslední rok a zapracuje i zpětné opravy. Po delší odstávce doplní zmeškané období. Starší záznamy uchovává v Home Assistantu. Poplatek se přebírá z vyúčtování JRK, cena se ke svozu přiřazuje podle identifikátoru záznamu. Pro statistiky počtu svozů je rozhodující místní datum skutečného svozu.
 
-Po restartu může integrace ihned zobrazit uloženou historii a poslední známý plán. Pokud je potřeba data obnovit a portál je dočasně nedostupný, karta ukáže datum uložených údajů. Integrace opakuje pokus po 15 minutách. Po úspěšné synchronizaci se otevřená karta přepočítá i při zpětné opravě ceny.
+Po restartu se senzory a kalendáře obnoví z posledních uložených údajů místa. Během stahování nebo při výpadku dál zobrazují poslední známé hodnoty. Ruční aktualizace entity respektuje stejný termín jako automatická aktualizace. Otevření karty nebo změna roku čte místní historii.
+
+Po chybě se první opakování naplánuje za 15 minut. Při dalších neúspěších se interval zdvojnásobuje až na 24 hodin. Pokud server v hlavičce `Retry-After` požádá o delší přestávku, má jeho termín přednost. Čekání platí i po restartu. Při odmítnutém přihlášení Home Assistant nabídne nové přihlášení a automatické stahování se pozastaví.
+
+### Diagnostika stahování
+
+Na stránce zařízení svozového místa najdete v části **Diagnostika** čtyři senzory:
+
+| Senzor | Význam |
+| --- | --- |
+| Poslední pokus o synchronizaci | Čas zahájení posledního stahování pro účet. |
+| Poslední úspěšné stažení | Čas posledního úplného stažení údajů konkrétního místa. Při aktualizaci ze starší verze se objeví až po prvním novém stažení. |
+| Příští pokus o synchronizaci | Plánovaný čas dalšího pokusu pro účet. Při čekání na nové přihlášení není stanoven. |
+| Chyba synchronizace | Příčina posledního neúspěchu, případně stav **Bez chyby**. |
+
+Při výpadku v průběhu stahování několika míst se už dokončená místa uloží. Při dalším pokusu se čerstvá data těchto míst použijí z disku.
 
 Při potížích můžete [založit hlášení na GitHubu](https://github.com/CooLajz/ha-jrk-digital/issues). Uveďte verzi Home Assistantu, verzi integrace a krok, při kterém problém nastal. Z přiložených výpisů a snímků odstraňte přihlašovací údaje, adresu a identifikátory svozového místa.

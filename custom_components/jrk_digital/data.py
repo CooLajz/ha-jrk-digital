@@ -40,12 +40,23 @@ def money(values):
 
 def pages(client, path, params):
     first = client.get(path, dict(params, Page=1))
-    items = list(first["items"])
-    for page in range(2, first["pageCount"] + 1):
+    total, count = first["total"], first["pageCount"]
+    items = first["items"]
+    if (not isinstance(items, list) or type(total) is not int or type(count) is not int
+            or first.get("page", 1) != 1 or total < 0 or len(items) > total
+            or (total == 0 and count not in (0, 1))
+            or (total > 0 and not (items and 1 <= count <= min(total, 1000)))):
+        raise PortalError("JRK vrátil neplatné údaje o stránkování.")
+    items = list(items)
+    for page in range(2, count + 1):
+        if len(items) >= total:
+            raise PortalError("Počet stránek JRK neodpovídá počtu záznamů.")
         result = client.get(path, dict(params, Page=page))
-        if result["page"] != page or first["total"] != result["total"]:
+        batch = result["items"]
+        if (result["page"] != page or result["total"] != total or result["pageCount"] != count
+                or not isinstance(batch, list) or not batch):
             raise PortalError("Seznam se během načítání změnil.")
-        items.extend(result["items"])
+        items.extend(batch)
     if len(items) != first["total"]:
         raise PortalError("Portál neposkytl všechny stránky.")
     return items
@@ -68,7 +79,7 @@ def fetch_place(client, place, previous, today):
                if item["date"][:10] < start.isoformat()}
     params = {"Date.From": start.isoformat(), "Date.To": end}
     evidence = pages(client, base + "waste-evidence", params)
-    bins = pages(client, base + "trash-bin", {})
+    bins = pages(client, base + "trash-bin", {}) if any(row.get("barcode") for row in evidence) else []
     waste_by_barcode = {b["barcode"]: b["wasteName"] for b in bins if b.get("barcode") and b.get("wasteName")}
     seen = set()
     for row in evidence:
@@ -92,7 +103,7 @@ def fetch_place(client, place, previous, today):
         report = client.get(base + "fee-monthly-view", {"Date.From": lower.isoformat(), "Date.To": upper.isoformat()})
         if year == today.year:
             annual_fee = report["finalFee"]
-        for month in report.get("monthlyFees") or []:
+        for month in report["monthlyFees"] or []:
             key = month["month"][:7]
             if lower.isoformat()[:7] <= key <= upper.isoformat()[:7]:
                 # The first month may straddle the rolling update window.
@@ -113,7 +124,7 @@ def fetch_place(client, place, previous, today):
     return {"history": history, "months": months, "annual_fee": annual_fee, "updated": end,
             "first_month": previous.get("first_month", start.isoformat()[:7]),
             "weights": {str(r["wasteCode"]): {"name": r["wasteName"], "kg": r["weight"]} for r in waste["items"]},
-            "schedule": sorted([{"day": r["collectionDateTs"][:10], "name": r["wasteName"],
+            "schedule": sorted([{"day": date.fromisoformat(r["collectionDateTs"][:10]).isoformat(), "name": r["wasteName"],
                                  "route": str(r["wasteCollectionRouteId"])} for r in schedule],
                                key=lambda r: (r["day"], r["name"]))}
 
