@@ -1,0 +1,35 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Přihlášení do JRK Digital",
+        "description": "Zadejte údaje pro občanský portál JRK Digital.",
+        "data": {
+          "username": "Uživatelské jméno",
+          "password": "Heslo"
+        }
+      },
+      "places": {
+        "title": "Svozová místa",
+        "description": "Vyberte místa, která chcete sledovat.",
+        "data": {
+          "places": "Svozová místa"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Ověřte prosím uživatelské jméno a heslo.",
+      "cannot_connect": "K portálu JRK se nelze připojit.",
+      "select_places": "Vyberte alespoň jedno dostupné místo."
+    },
+    "abort": {
+      "already_configured": "Účet již byl přidán.",
+      "no_places": "Účet nemá žádné dostupné svozové místo.",
+      "reauth_successful": "Přihlášení bylo obnoveno.",
+      "wrong_account": "Použijte původní účet.",
+      "invalid_auth": "Ověřte prosím uživatelské jméno a heslo.",
+      "cannot_connect": "K portálu JRK se nelze připojit.",
+      "reconfigure_successful": "Výběr svozových míst byl uložen."
+    }
+  }
+}

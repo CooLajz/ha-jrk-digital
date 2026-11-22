@@ -1,0 +1,18 @@
+{
+  "domain": "jrk_digital",
+  "name": "JRK Digital",
+  "codeowners": [
+    "@CooLajz"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "frontend",
+    "recorder"
+  ],
+  "documentation": "https://github.com/CooLajz/ha-jrk-digital",
+  "integration_type": "hub",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/CooLajz/ha-jrk-digital/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}

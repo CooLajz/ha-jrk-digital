@@ -1,0 +1,34 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "JRK Digital sign-in",
+        "description": "Enter your JRK Digital citizen portal credentials.",
+        "data": {
+          "username": "Username",
+          "password": "Password"
+        }
+      },
+      "places": {
+        "title": "Collection points",
+        "data": {
+          "places": "Collection points"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Check your username and password.",
+      "cannot_connect": "Unable to connect to JRK.",
+      "select_places": "Select at least one available collection point."
+    },
+    "abort": {
+      "already_configured": "This account is already configured.",
+      "no_places": "No collection points are available.",
+      "reauth_successful": "Sign-in restored.",
+      "wrong_account": "Sign in with the original account.",
+      "invalid_auth": "Check your username and password.",
+      "cannot_connect": "Unable to connect to JRK.",
+      "reconfigure_successful": "Collection points updated."
+    }
+  }
+}
