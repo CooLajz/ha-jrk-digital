@@ -1,4 +1,4 @@
-# JRK Digital pro Home Assistant
+# <img src="custom_components/jrk_digital/brand/icon.png" width="40" height="40" alt=""> JRK Digital pro Home Assistant
 
 [![Kontroly Home Assistantu, HACS a testy](https://github.com/CooLajz/ha-jrk-digital/actions/workflows/validate.yml/badge.svg?branch=main)](https://github.com/CooLajz/ha-jrk-digital/actions/workflows/validate.yml?query=branch%3Amain)
 
